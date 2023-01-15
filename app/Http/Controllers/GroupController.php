@@ -41,6 +41,8 @@ class GroupController extends Controller
                 'line' => 'required|unique:leaders',
                 'email' => 'required|unique:leaders',
                 
+
+                
             ],[
                 'line.required' => 'line is required',
                 'email.required' => 'email is required',

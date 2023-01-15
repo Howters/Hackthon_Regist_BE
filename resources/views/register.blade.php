@@ -97,15 +97,15 @@
 
                         <div class="wa-num">
                             <div class="input">
-                                <label for="num">Whatapp Number</label>
-                                <input type="tel" name="leaderWa" id="num" placeholder="ex: 081378915673" required pattern="[0-9]{9,12}">
+                                <label for="num">Whatsapp Number</label>
+                                <input type="tel" name="wa" id="num" placeholder="ex: 081378915673" required pattern="[0-9]{9,12}">
                             </div>
                         </div>
 
                         <div class="file">
                             <div class="input">
                                 <label for="cv">Upload CV <span> ( pdf, jpg, jpeg and png )</span></label>
-                                <input type="file" name="leaderCv" id="file_upload" accept="application/pdf, image/jpg, image/jpeg. image/png">
+                                <input type="file" name="cv" id="file_upload" accept="application/pdf, image/jpg, image/jpeg. image/png">
                             </div>
                         </div>
 
@@ -129,7 +129,7 @@
                         <div class="git-id">
                             <div class="input">
                                 <label for="git">Github/Gitlab ID</label>
-                                <input type="text" name="leaderGit" id="git" placeholder="Your Github/Gitlab ID" >
+                                <input type="text" name="leaderGit" id="git" placeholder="Your Github/Gitlab ID" required>
                             </div>
                         </div>
                         
