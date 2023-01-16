@@ -35,7 +35,7 @@
                 <a href="#timeline">Timeline</a>
         </div>
         <div class="login-btn">
-                <a href="#">Login</a>
+                <a href="{{route('login')}}">Login</a>
         </div>
     </div>
   </nav>

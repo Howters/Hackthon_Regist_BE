@@ -76,10 +76,12 @@ if (pass.match(/[!@#$%^&()'[\]"?+-/*={}.,;:_]+/)){
 
     $('#pass, #confirm_pass').on('keyup', function () {
         if ($('#pass').val() == $('#confirm_pass').val()) {
-          $('#message').html('Password Match!').css('color', 'green');
+          $('#message').html('').css('color', 'green');
         } else 
-          $('#message').html('Password is not Match!').css('color', 'red');
+          $('#message').html('Password is not Match!').css('color', 'red')
       });
+
+
 
     
 });

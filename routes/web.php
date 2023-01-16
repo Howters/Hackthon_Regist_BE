@@ -21,8 +21,25 @@ Route::get('/', function () {
 });
 
 Route::get('/register', function () {
-    return view('register');
-})->name('register');
+    return view('register');})->name('register');
+
+Route::get('/login',function(){
+    return view('login');})->name('login');
+
+Route::get('/dashboard',function(){
+    return view('dashboard'); })->name('dashboard');
+
+Route::get('/payment',function(){
+
+    return view('payment'); })->name('payment');
+
+Route::get('/timeline',function(){
+
+    return view('timeline'); })->name('timeline');
+
+Route::get('/logout',function(){
+
+        return view('logout'); })->name('logout');
 
 Route::post('/store-group',[GroupController::class,'store']);
 Route::post('/store-leader',[LeaderController::class,'store'])->name('store-leader');
