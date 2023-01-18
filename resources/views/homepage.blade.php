@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hackthon</title>
+    {{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"> --}}
     <link rel="stylesheet" href="{{ asset('style.css') }}">
     <!-- favicon -->
     <link rel="icon" type="image/x-icon" href="./assets/favicon-logo.png">
@@ -41,10 +42,15 @@
   </nav>
   <!-- ----------------------Landing Page------------------------- -->
   <section id="landing-page">
-    <div class="container">
-        <div class="circle"></div>
-        <div class="page-content">
-            <div class="heading">
+      <div class="container">
+          <div class="circle"></div>
+          <div class="page-content">
+              <div class="heading">
+                @if(Session::has('message'))
+                <div class="alert alert-success">
+                  {{ Session::get('message') }}
+              </div>
+              @endif
                 <h1 class="judul-atas">Discover Your <span>Interest</span></h1>
                 <h1 class="judul-bawah">and Turn It Into <span>Innovative Ideas</span></h1>
                 <p>Hackthon merupakan acara teknologi tahunan terbesar yang diselenggarakan oleh Bina Nusantara Computer Club (BNCC)
@@ -377,33 +383,33 @@
 <section id="contact-us">
     <div class="card">
         <h2>Contact Us</h2>
-        <form onsubmit="return confirm('Do you really want to submit the form?');" action="#landing-page">
+        <form onsubmit="return confirm('Do you really want to submit the form?');" action="{{route('email')}}">
             <div class="row">
                 <div class="col">
                   <div class="form-group">
                     <label>Name</label>
-                    <input type="text" placeholder="Your name" required>
+                    <input type="text" name ="name" placeholder="Your name" required>
                   </div>
                 </div>
             
                 <div class="col">
                   <div class="form-group">
                     <label>Subject</label>
-                    <input type="text" placeholder="Filll in the subject of your e-mail" required>
+                    <input type="text" name ="subject" placeholder="Filll in the subject of your e-mail" required>
                   </div>
                 </div>
             
                 <div class="col">
                   <div class="form-group">
                     <label>Email</label>
-                    <input type="email" placeholder="Your E-mail address" required>
+                    <input type="email" name ="email" placeholder="Your E-mail address" required>
                   </div>
                 </div>
             
                 <div class="col">
                   <div class="form-group">
                     <label>Message</label>
-                    <textarea placeholder="Write a message..." required></textarea>
+                    <textarea placeholder="Write a message..." name ="message" required></textarea>
                   </div>
                 </div>
                 <div class="col">
@@ -433,5 +439,7 @@
 </div>
 
 <script src="{{ asset('scripts.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+
 </body>
 </html>

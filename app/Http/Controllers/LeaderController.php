@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Leader;
-
+use Illuminate\Support\Facades\Auth;
 
 class LeaderController extends Controller
 {
@@ -95,9 +95,32 @@ class LeaderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request)
     {
-        //
+        $validated = $request->validate([
+           
+            'bukti' => 'required|file|mimes:pdf,jpg,jpeg,png',
+
+        ],[
+            'bukti.required' => 'CV is required',
+            'bukti.mimes' => 'CV should be in pdf,jpg,jpeg,png format',
+            
+        ]);
+        $extension_bukti = $request-> file('bukti')->getClientOriginalExtension();
+        $filename_bukti = $request->name.'_'."bukti".'.'.$extension_bukti;
+      
+        
+        
+        $request->file('bukti')->storeAs('/public/Product/', $filename_bukti);
+        $id = Auth::user()->id;
+
+        $leader = Leader::findOrFail($id);
+        $leader->update([
+
+            'bukti'=>$filename_bukti,
+            
+        ]);
+        return redirect('/payment');
     }
 
     /**

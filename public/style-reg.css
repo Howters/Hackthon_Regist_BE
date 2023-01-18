@@ -200,6 +200,10 @@ color: #FFFFFF;
     color:rgba(152, 136, 141, 1);
 }
 
+ .popup{
+    color: red;
+ }
+
 #message{
     margin-top: 5vh;
     margin-left: 4vh;

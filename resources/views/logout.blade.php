@@ -22,19 +22,7 @@
     <script src="js/flipdown/flipdown.js"></script>
 </head>
 <body>
-    <nav id="navbar">
-        <div class="container">
-            <img src="login page/assets/logo.png" alt="">
-            <div class="nav-menu">
-                <ul>
-                    <a href="dashboard.html"><li>Dashboard</li></a>
-                    <a href="payment.html"><li>Payment</li></a>
-                    <a href="timeline.html"><li>Timeline</li></a>
-                </ul>
-            </div>
-            <a href="logout.html"><p  style="color: var(--gold);">Logout</p></a>
-        </div>
-    </nav>
+    @include('navbar')
 
     <div id="container" style="display: flex; justify-content: left; padding-left: 100px;">
         <img src="Login Page/assets/logout.png" alt="">
@@ -42,7 +30,8 @@
             <p style="padding-top: 110px; text-align: center;">You’re <span>Leaving..</span> <br> Are you sure? 
 </p>  
 
-            <form>
+            <form method ="post" action="{{route('log-out')}}">
+                @csrf
                 <div class="button1">
                     <button>Yes, log me out</button>
                 </div>

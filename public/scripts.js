@@ -25,3 +25,16 @@ for (i = 0; i < acc.length; i++) {
     }
   });
 }
+
+$(document).ready(function() {
+  if ($('.alert-success').length) {
+      $('.alert-success').fadeIn().delay(3000).fadeOut();
+      Swal.fire({
+          title: 'Success!',
+          text: $('.alert-success').text(),
+          icon: 'success',
+          timer:3000,
+          showConfirmButton: false
+      });
+  }
+});

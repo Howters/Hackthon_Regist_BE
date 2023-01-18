@@ -14,7 +14,7 @@ return [
     */
 
     'defaults' => [
-        'guard' => 'web',
+        'guard' => 'group',
         'passwords' => 'users',
     ],
 
@@ -34,11 +34,11 @@ return [
     | Supported: "session"
     |
     */
-
     'guards' => [
-        'web' => [
+      
+        'group' => [
             'driver' => 'session',
-            'provider' => 'users',
+            'provider' => 'groups',
         ],
     ],
 
@@ -60,16 +60,17 @@ return [
     */
 
     'providers' => [
-        'users' => [
+        'groups' => [
             'driver' => 'eloquent',
-            'model' => App\Models\User::class,
+            'model' => App\Models\Group::class,
         ],
+    ],
 
         // 'users' => [
         //     'driver' => 'database',
         //     'table' => 'users',
         // ],
-    ],
+ 
 
     /*
     |--------------------------------------------------------------------------

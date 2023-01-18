@@ -24,19 +24,7 @@
     
 </head>
 <body>
-    <nav id="navbar">
-        <div class="container">
-            <img src="login page/assets/logo.png" alt="">
-            <div class="nav-menu">
-                <ul>
-                    <a href="dashboard.html"><li>Dashboard</li></a>
-                    <a href="payment.html"><li style="color: var(--gold);">Payment</li></a>
-                    <a href="timeline.html"><li>Timeline</li></a>
-                </ul>
-            </div>
-            <a href="logout.html"><p>Logout</p></a>
-        </div>
-    </nav>
+    @include('navbar')
     <section id="landing-page">
         <div class="container">
             <div class="desc">
@@ -174,6 +162,7 @@
                         </div>
             </div>
 
+            @if($group->leader->bukti==0)
             <div class="dropdown">
                 <div class="toggle">
                     <button">
@@ -183,14 +172,16 @@
                     
                 </div>
     
+
                 <div class="parag1">
                    
                     <p>Upload Bukti Pembayaran</p>
 
-                    <form>
+                    <form method="POST" action="{{route('store-bukti')}} " enctype="multipart/form-data">
+                        @csrf
                         <div class="upload-file" style="display: flex; gap: 9rem; margin-top: 1.5rem;">
                        
-                            <input type="file" placeholder="Upload in pdf, jpg, jpeg and png" required accept="application/pdf, image/jpg, image/jpeg. image/png">
+                            <input type="file" name="bukti" placeholder="Upload in pdf, jpg, jpeg and png" required accept="application/pdf, image/jpg, image/jpeg. image/png">
                             <button type="submit" id="submitButton">
                                 Confirm and Submit
                             </button>
@@ -208,7 +199,36 @@
                             
                 </div>
 
+                @else
+                <div class="dropdown">
+                    <div class="toggle">
+                        <button">
+                            <p>Bukti Pembayaran<i class="fa fa-caret-down"   aria-hidden="true" style="font-size: 20px; padding-left: 975px;"></i></p>
+                            
+                        </button>
+                        
+                    </div>
+        
+    
+                    <div class="parag1">
+                   
+                    {{-- <p>Bukti Pembayaran</p> --}}
 
+                    <p style="text-align: center;">Click to Preview</p>
+  
+                            <div class="viewBukti">
+
+                    <!-- Yang href nya nnti di ganti aja -->
+                       
+                        <a href="{{asset('/storage/Product/'.$group->leader->bukti)}}" target="_blank"><p>Bukti Pembayaran</p></a> 
+                    </div>
+                </div>
+                        </div>
+                 
+                    {{-- </div> --}}
+                
+
+                @endif
                 <div class="dropdown">
                     <div class="toggle">
                         <button">
@@ -257,7 +277,7 @@
                         <div class="hero">
                             <div class="countdown">
                               <div class="time">
-                                <span id="days">00</span>
+                                <span id="days">10</span>
                                 <span class="unit">days</span>
                               </div>
                               <div class="semicolon">:</div>
@@ -368,7 +388,7 @@
             }
 
             function getCounter() {
-          var countDownDate = new Date("Jan 18, 2023 23:59:00").getTime();
+          var countDownDate = new Date("31 Jan , 2023 23:59:00").getTime();
     
           var x = setInterval(function () {
             var now = new Date().getTime();

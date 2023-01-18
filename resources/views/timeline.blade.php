@@ -22,48 +22,36 @@
     <script src="js/flipdown/flipdown.js"></script>
 </head>
 <body>
-    <nav id="navbar">
-        <div class="container">
-            <img src="assets/logo.png" alt="">
-            <div class="nav-menu">
-                <ul>
-                    <a href="dashboard.html"><li>Dashboard</li></a>
-                    <a href="payment.html"><li>Payment</li></a>
-                    <a href="timeline.html"><li style="color: var(--gold);">Timeline</li></a>
-                </ul>
-            </div>
-            <a href="logout.html"><p>Logout</p></a>
-        </div>
-    </nav>
+    @include('navbar')
 
     <section id="timeline">
         <h3>Timeline</h3>
         <p style="margin-bottom: 5rem;">Mark the dates.</p>
 
         <div class="timeline">
-            <img src="assets/timeline.png" alt="">
+            <img src="login page/assets/timeline.png" alt="">
 
         </div>
         <div class="timeline-content" style="display: flex; justify-content: space-around; gap: 6rem;">
             <div class="content">
-                <img src="assets/openRegis.png" class="img-content" alt="">
+                <img src="login page/assets/openRegis.png" class="img-content" alt="">
                 <p id="desc"><b>29 January 2023</b> <br>
                     Register yourself by clicking the register button. Fill in you and your team students’ credentials.</p>
             </div>
             <div class="content">
-                <img src="assets/closeRegis.png" class="img-content" alt="">
+                <img src="login page/assets/closeRegis.png" class="img-content" alt="">
                 <p id="desc"><b>25 February 2023</b> <br>
                     Make sure you have filled all the requirements. You can contact your mentors for more info.</p>
             </div>
             <div class="content">
-                <img src="assets/techMeeting.png" class="img-content" alt="">
+                <img src="login page/assets/techMeeting.png" class="img-content" alt="">
                 <p id="desc"><b>1 March 2023</b></p>
                 <form>
                     <button type="submit">Join here</button>
                 </form>
             </div>
             <div class="content">
-                <img src="assets/competitionDay.png" class="img-content" alt="">
+                <img src="login page/assets/competitionDay.png" class="img-content" alt="">
                 <p id="desc"><b>30 March 2023</b></p>
                 <form>
                     <button type="submit">Join here</button>

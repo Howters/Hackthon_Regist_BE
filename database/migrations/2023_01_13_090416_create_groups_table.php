@@ -15,10 +15,15 @@ return new class extends Migration
     {
         Schema::create('groups', function (Blueprint $table) {
             $table->id();
-            $table->integer('leader_id')->default('0');
+            $table->integer('leader_id')->default(0);
             $table->string('name');
             $table->string('password');
-            $table->integer('binusian')->nullable();
+            $table->integer('binusian')->default(0);
+            $table->integer('isAdmin')->default(0);
+            $table->integer('memberCount')->default(0);
+
+
+
             $table->timestamps();
         });
     }

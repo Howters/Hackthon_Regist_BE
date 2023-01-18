@@ -20,6 +20,11 @@ class Leader extends Model
             'birth_date',
             'cv',
             'flazz',
-            'ktp'
+            'ktp',
+            'bukti'
     ];
+
+    public function group(){
+        return $this->belongsTo(Group::class);
+    }
 }

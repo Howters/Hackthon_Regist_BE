@@ -7,6 +7,7 @@
     <title>Register</title>
      <!-- favicon -->
      <link rel="icon" type="image/x-icon" href="./asset/favicon-logo.png">
+     {{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"> --}}
      <link rel="stylesheet" href="{{ asset('style-reg.css') }}">
      <script src="http://code.jquery.com/jquery-1.7.min.js"></script>
      <script src="{{ asset('script.js') }}"></script>
@@ -18,20 +19,21 @@
             <h1>Registration</h1>
         </div>
         <section id="form-section">
-            <form action="">
+            <form method = "POST" action= "{{ route('store-group') }}" enctype="multipart/form-data">
+                @csrf
                 <div id="group-info">
                     <h1>Group Information</h1>
                     <div class="input-group">
                         <div class="name">
                             <div class="input">
                             <label for="group-name">Group Name</label>
-                            <input type="text" name="group-name" id="group-name" placeholder="Your group name" required>
+                            <input type="text" name="groupName" id="group-name" placeholder="Your group name" value= "{{old('groupName')}}"required >
                             </div>
                         </div>
                         <div class="password">
                             <div class="input">
                                 <label for="pass">Password</label>
-                                <input type="password" name="pass" id="pass" placeholder="Your password" required >
+                                <input type="password" name="pass" id="pass" placeholder="Your password" value= "{{old('pass')}}"required >
                             </div>
                             <div id="pswd_info">
                                 <h4>Password must meet the following requirements:</h4>
@@ -47,13 +49,16 @@
                         <div class="confirm-password">
                             <div class="input">
                                 <label for="confirm_pass">Confirm Password</label>
-                                <input type="password" name="confirm_pass" id="confirm_pass" placeholder="Confirm your password" required onkeyup="validate_password()">
+                                <input type="password" name="confirm_pass" id="confirm_pass" placeholder="Confirm your password" value= "{{old('confirm_pass')}}"required onkeyup="validate_password()">
                             </div>
                             <span id='message'></span>
                         </div>
                         <div class="binusian">
-                            <input type="radio" name="binus" id="binus" required>Binusian
-                            <input type="radio" name="binus" id="binus" required>Non-Binusian
+
+                            <input type="radio" name="binus" id="binus-yes" value="yes" onchange="showFileInput()" required>
+                            <label for="binus-yes">Binusian</label>
+                            <input type="radio" name="binus" id="binus-no" value="no" onchange="hideFileInput()" required>
+                            <label for="binus-no">Non-Binusian</label>
                         </div>
                     </div>
                    
@@ -65,46 +70,55 @@
                         <div class="f-name">
                             <div class="input">
                             <label for="full-name">Full Name</label>
-                            <input type="text" name="full-name" id="full-name" placeholder="Your full name" required >
+                            <input type="text" name="name" id="full-name" placeholder="Your full name" value= "{{old('name')}}"required >
                             </div>
                         </div>
 
                         <div class="birth-place">
                             <div class="input">
                                 <label for="birth">Birth Place</label>
-                                <input type="text" name="birth" id="birth" placeholder="Your birth place" required>
+                                <input type="text" name="birth_place" id="birth" placeholder="Your birth place"value= "{{old('birth_place')}}" required>
                             </div>
                         </div>
 
                         <div class="mail">
                             <div class="input">
                                 <label for="email">Email</label>
-                                <input type="email" name="email" id="email" placeholder="Your e-mail address"  onkeyup="validate_unique()" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$">
+                                <input type="email" name="email" id="email" placeholder="Your e-mail address"  value= "{{old('email')}}" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$">
                             </div>
                             <div class="margin-left-validation" id="unique1"></div>
+                            @error('email')
+                            <span class="popup" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
                         </div>
 
                         <div class="birth-date">
                             <div class="input">
                                 <label for="b-date">Birth Date</label>
-                                <input type="date" name="b-date" id="b-date" placeholder="Your birth date" required>
+                                <input type="date" name="birth_date" id="b-date" placeholder="Your birth date" value= "{{old('birth_date')}}" required>
                             </div>
                         </div>
 
                         <div class="wa-num">
                             <div class="input">
-                                <label for="num">Whatapp Number</label>
-                                <input type="tel" name="num" id="num" placeholder="ex: 081378915673"  required onkeyup="validate_waNum()">
+                                <label for="num">Whatsapp Number</label>
+                                <input type="tel" name="whatsapp" id="num" placeholder="ex: 081378915673" value= "{{old('whatsapp')}}" required onkeyup="validate_waNum()">
                             </div>
                             <div class="margin-left-validation" id='messagenum'></div>
                             <div class="margin-left-validation" id='messagenumunique'></div>
-                            
+                            @error('whatsapp')
+                            <span class="popup" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
                         </div>
 
                         <div class="file">
                             <div class="input">
                                 <label for="cv">Upload CV <span> ( pdf, jpg, jpeg and png )</span></label>
-                                <input type="file" name="cv" id="file_upload" accept="application/pdf, image/jpg, image/jpeg. image/png">
+                                <input type="file" name="cv" id="file_upload" accept="application/pdf, image/jpg, image/jpeg. image/png" required>
                             </div>
                             
                         </div>
@@ -112,30 +126,35 @@
                         <div class="id">
                             <div class="input">
                                 <label for="line">LINE ID</label>
-                                <input type="text" name="line" id="line" onkeyup="validate_unique()" placeholder="Your LINE ID" required>
+                                <input type="text" name="line"  id="line" value= "{{old('line')}}" placeholder="Your LINE ID" required>
                             </div>
                             <div class="margin-left-validation" id="unique3"></div>
+                            @error('line')
+                            <span class="popup" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
                         </div>
 
-                        <div class="file">
+                        <div id="file-input" style="display: none;">
                             <div class="input">
-                                <label for="flazz">Upload Flazz Card (*Binusian only) <span> ( pdf, jpg, jpeg and png )</span></label>
-                                <input type="file" name="flazz" id="file_upload" accept="application/pdf, image/jpg, image/jpeg. image/png">
+                                <label for="flazz_upload">Upload Flazz Card (*Binusian only) <span> ( pdf, jpg, jpeg and png )</span></label>
+                                <input type="file" name="flazz" id="flazz_upload" accept="application/pdf, image/jpg, image/jpeg. image/png">
                             </div>
                         </div>
 
                         <div class="git-id">
                             <div class="input">
                                 <label for="git">Github/Gitlab ID</label>
-                                <input type="text" name="git" id="git" placeholder="Your Github/Gitlab ID" required>
+                                <input type="text" name="git" id="git" value= "{{old('git')}}"placeholder="Your Github/Gitlab ID" required>
                             </div>
                         </div>
                         
-                        <div class="file">
+                        <div id="file-inputs" style="display: none;">
                             <div class="input">
                                 <label for="id">Upload ID card (*Non-Binusian only) <span> ( pdf, jpg, jpeg and png )</span></label>
-                                <input type="file" name="id" id="file_upload" accept="application/pdf, image/jpg, image/jpeg. image/png">
-                            </div>
+                                <input type="file" name="ktp" id="ktp_upload" accept="application/pdf, image/jpg, image/jpeg. image/png">
+                        </div>
                         </div>
                     </div>
                     <button type="submit" id="create" class="submit_btn" onclick="wrong_pass_alert()">Confirm and Submit</button>
@@ -148,32 +167,45 @@
 <script>
 
     // validate harus unik
-    function validate_unique(){
-        var email = document.getElementById("email").value;
-        var line = document.getElementById("line").value;
-            if(email===""){
-                document.getElementById("unique1").innerHTML="Must be Unique";
-                document.getElementById("unique1").style.color="Red";
-                document.getElementById('create').disabled = true;
-                document.getElementById('create').style.opacity = (0.4);
-            }else{
-                document.getElementById("unique1").innerHTML="";
-                document.getElementById('create').disabled = false;
-                document.getElementById('create').style.opacity = (1);
-            }
+    // function validate_unique(){
+    //     var email = document.getElementById("email").value;
+    //     var line = document.getElementById("line").value;
+    //         if(email===""){
+    //             document.getElementById("unique1").innerHTML="Must be Unique";
+    //             document.getElementById("unique1").style.color="Red";
+    //             document.getElementById('create').disabled = true;
+    //             document.getElementById('create').style.opacity = (0.4);
+    //         }else{
+    //             document.getElementById("unique1").innerHTML="";
+    //             document.getElementById('create').disabled = false;
+    //             document.getElementById('create').style.opacity = (1);
+    //         }
            
-            if(line===""){
-                document.getElementById("unique3").innerHTML="Must be Unique";
-                document.getElementById("unique3").style.color="Red";
-                document.getElementById('create').disabled = true;
-                document.getElementById('create').style.opacity = (0.4);
-            }else{
-                document.getElementById("unique3").innerHTML="";
-                document.getElementById('create').disabled = false;
-                document.getElementById('create').style.opacity = (1);
-            }
+    //         if(line===""){
+    //             document.getElementById("unique3").innerHTML="Must be Unique";
+    //             document.getElementById("unique3").style.color="Red";
+    //             document.getElementById('create').disabled = true;
+    //             document.getElementById('create').style.opacity = (0.4);
+    //         }else{
+    //             document.getElementById("unique3").innerHTML="";
+    //             document.getElementById('create').disabled = false;
+    //             document.getElementById('create').style.opacity = (1);
+    //         }
 
-    }
+    // }
+    function showFileInput() {
+  document.getElementById("file-input").style.display = "block";
+  document.getElementById("flazz_upload").required = true;
+  document.getElementById("file-inputs").style.display = "none";
+  document.getElementById("ktp_upload").required = false
+}
+
+function hideFileInput() {
+  document.getElementById("file-input").style.display = "none";
+  document.getElementById("flazz_upload").required = false;
+  document.getElementById("file-inputs").style.display = "block";
+  document.getElementById("ktp_upload").required = true;
+}
 
 
     function validate_password() {
@@ -204,7 +236,7 @@ if (numLength<9||numLength>=13) {
       = 'Whatsapp number not valid';
       document.getElementById('messagenumunique').style.color = 'red';
       document.getElementById('messagenumunique').innerHTML
-      = 'Whatsapp number not unique';
+    //   = 'Whatsapp number not unique';
     document.getElementById('create').disabled = true;
     document.getElementById('create').style.opacity = (0.4);
 }else {

@@ -172,7 +172,23 @@ html{
     background-size: 200vh 20vh 7vh 7vh;
   background-position: top;
 }
+.alert-success {
+  color: #155724 !important;
+  background-color: #1fc445 !important;
+  border-color: #c3e6cb !important;
+}
 
+.my-alert{
+  background-color: #ffc107 !important;
+  color: #343a40 !important;
+}
+.alert-success hr {
+  border-top-color: #5bb771 !important;
+}
+
+.alert-success .alert-link {
+  color: #0b2e13 !important;
+}
 #landing-page .container .circle{
   position:absolute;
   width: 100%;

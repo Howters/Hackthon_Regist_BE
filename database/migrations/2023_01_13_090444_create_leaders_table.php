@@ -23,8 +23,9 @@ return new class extends Migration
             $table->string('birth_place');
             $table->date('birth_date');
             $table->string('cv');
-            $table->string('flazz');
-            $table->string('ktp');
+            $table->string('flazz')->default(0);
+            $table->string('ktp')->default(0);
+            $table->string('bukti')->default(0);
             $table->timestamps();
         });
     }

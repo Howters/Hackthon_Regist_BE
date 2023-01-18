@@ -35,24 +35,12 @@
     </script>
 </head>
 <body>
-    <nav id="navbar">
-        <div class="container">
-            <img src="login page/assets/logo.png" alt="">
-            <div class="nav-menu">
-                <ul>
-                    <a href="dashboard.html" id="db"><li style="color: var(--gold);">Dashboard</li></a>
-                    <a href="payment.html"><li>Payment</li></a>
-                    <a href="timeline.html"><li>Timeline</li></a>
-                </ul>
-            </div>
-            <a href="logout.html"><p>Logout</p></a>
-        </div>
-    </nav>
+    @include('navbar')
 
     <section id="landing-page">
         <div class="container">
             <div class="desc">
-                <h2>Welcome, (Nama Team)!!</h2>
+                <h2>Welcome, {{$group->name}}!!</h2>
                 <p>Scroll down to check and update data!</p>
             </div>
             <img src="login page/assets/dashboard.png" alt="">
@@ -75,13 +63,13 @@
                     <form>
                         <div class="column" style="display: flex;">
                             <div class="input">
-                                <label for="name" style="display: block;">Full Name</label>
-                            <input type="text" placeholder="Full Name" id="fullName" readonly disabled="disabled">
+                                <label for="names" style="display: block;">Full Name</label>
+                            <input type="text" placeholder="{{$group->leader->name}}" id="fullName" readonly disabled="disabled">
                             </div>
 
                             <div class="input">
                                 <label for="lineid" style="display: block;">LINE ID</label>
-                            <input type="text" placeholder="LINE ID" id="lineid">
+                            <input type="text" placeholder="{{$group->leader->line}}" id="lineid" readonly disabled="disabled">
                             </div>
                             
 
@@ -91,12 +79,12 @@
                         <div class="column" style="display: flex;">
                             <div class="input">
                                 <label for="name" style="display: block;">E-mail</label>
-                            <input type="email" placeholder="E-mail" id="E-mail">
+                            <input type="email" placeholder="{{$group->leader->email}}" id="E-mail"readonly disabled="disabled">
                             </div>
 
                             <div class="input">
                                 <label for="birthplace" style="display: block;">Birth place</label>
-                            <input type="text" placeholder="Birthplace" id="birthplace">
+                            <input type="text" placeholder="{{$group->leader->birth_place}}" id="birthplace" readonly disabled="disabled">
                             </div>
                             
 
@@ -106,12 +94,12 @@
                         <div class="column" style="display: flex;">
                             <div class="input">
                                 <label for="WA" style="display: block;">Whatsapp Number</label>
-                            <input type="tel" placeholder="Whatsapp Number" id="wa">
+                            <input type="tel" placeholder="{{$group->leader->whatsapp}}" id="wa"readonly disabled="disabled">
                             </div>
 
                             <div class="input">
                                 <label for="birthdate" style="display: block;">Birth date</label>
-                            <input type="text" placeholder="Birth date" id="birthdate">
+                            <input type="text" placeholder="{{$group->leader->birth_date}}" id="birthdate"readonly disabled="disabled">
                             </div>
                             
 
@@ -121,7 +109,7 @@
                         <div class="column" style="display: flex; justify-content: center; margin-bottom: 2rem;" >
                             <div class="input">
                                 <label for="WA" style="display: block;">Github/Gitlab ID</label>
-                            <input type="text" placeholder="Github/Gitlab ID" id="wa">
+                            <input type="text" placeholder="{{$group->leader->github}}" id="wa"readonly disabled="disabled">
                             </div>
                             
 
@@ -133,17 +121,32 @@
 
                     <p style="text-align: center;">Click to Preview</p>
 
-                    <div class="viewBukti">
-                    <!-- Yang href nya nnti di ganti aja -->
+                    @if($group->binusian==1)
+                            <div class="viewBukti">
 
-                        <a href="assets/favicon.png" target="_blank"><p>ID Card (*Non-Binusian only)</p></a> 
-                        <a href="assets/favicon.png" target="_blank"><p>Curriculum Vitae</p></a> 
-                        <a href="assets/favicon.png" target="_blank"><p>Flazz Card (*Binusian only)</p></a> 
+                        
+                    <!-- Yang href nya nnti di ganti aja -->
+                       
+                        <a href="{{asset('/storage/Product/'.$group->leader->cv)}}" target="_blank"><p>Curriculum Vitae</p></a> 
+                        <a href="{{asset('/storage/Product/'.$group->leader->flazz)}}" target="_blank"><p>Flazz Card </p></a> 
                     </div>
                 </div>
+                @elseif ($group->binusian==0)
+                <div class="viewBukti">
+                       <a href="{{asset('/storage/Product/'.$group->leader->ktp)}}" target="_blank">
+                            <p>ID Card </p>
+                            
+                        </a> 
+                        <a href="{{asset('/storage/Product/'.$group->leader->cv)}}" target="_blank"><p>Curriculum Vitae</p></a> 
+                        {{-- <a href="{{asset('/storage/Product/'.$group->leader->flazz)}}" target="_blank"><p>Flazz Card (*Binusian only)</p></a>  --}}
+                    </div>
+                </div>
+                @endif
+                    
                 
-            </div>
+                
 
+               @if($group->memberCount<3)
             <div class="dropdown">
                 <div class="toggle1">
                     <button">
@@ -154,277 +157,206 @@
                 </div>
     
                 <div class="parag1">
-                    <form action="">
+                    <form method = "POST" action= "{{ route('store-member') }}" enctype="multipart/form-data">
+                        @csrf
                         <div class="addMember">
-                            <p style="text-align: center; margin-bottom: 2.5rem;">ADD MEMBER 1</p>
+                            <p style="text-align: center; margin-bottom: 2.5rem;">ADD MEMBER {{$group->memberCount+1}}</p>
                             <div class="column" style="display: flex;">
                                 <div class="input">
                                     <label for="name" style="display: block;">Full name</label>
-                                <input type="text" placeholder="Your full name">
+                                <input type="text" name="name"value= "{{old('name')}}" placeholder="Your full name" required>
                                 </div>
     
                                 <div class="input">
                                     <label for="birthplace" style="display: block;">Birth place</label>
-                                <input type="text" placeholder="Your birth place" id="birthplace">
+                                <input type="text"  name="birth_place" placeholder="Your birth place" id="birthplace"value= "{{old('birth_place')}}" required>
                                 </div>
     
                             </div>   
                                 
-                                
-    
-    
-                
-                            
-    
-                            
-    
                             <div class="column" style="display: flex;">
                                 <div class="input">
                                     <label for="email" style="display: block;">E-mail</label>
-                                <input type="email" placeholder="Your e-mail address">
-                                </div>
-    
-                                <div class="input">
-                                    <label for="birthplace" style="display: block;">Birth date</label>
-                                <input type="text" placeholder="Your birth date">
-                                </div>
-    
-                            </div>       
-    
+                                <input type="email" name ="email" placeholder="Your e-mail address" value= "{{old('email')}}" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$">
+                            </div>
+                            
+                            <div class="input">
+                                <label for="birthplace" style="display: block;">Birth date</label>
+                                <input type="date" name="birth_date" placeholder="Your birth date" value= "{{old('birth_date')}}" required>
+                            </div>
+                            
+                        </div>       
+                        <div class="margin-left-validation" ></div>
+                        @error('email')
+                        <span class="margin-left-validation" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                    @enderror   
                             
                             <div class="column" style="display: flex;">
                                 <div class="input">
-                                    <label for="tel" style="display: block;">Whatsapp Number</label>
-                                <input type="tel" placeholder="Your whatsapp number">
-                                </div>
-    
+                                    <label for="num" style="display: block;">Whatsapp Number</label>
+                                <input type="tel" name="whatsapp" id="num"  placeholder="ex: 081378915673" value= "{{old('whatsapp')}}" required onkeyup="validate_waNum()"></div>
+                                {{-- <div class="margin-left-validation" id='messagenumunique'></div> --}}
+                                
                                 <div class="input">
                                     <label for="CV" style="display: block;">Upload CV</label>
-                                <input type="file" placeholder="Upload in pdf, jpg, jpeg and png" required accept="application/pdf, image/jpg, image/jpeg. image/png">
+                                    <input type="file" name="cv"placeholder="Upload in pdf, jpg, jpeg and png" required accept="application/pdf, image/jpg, image/jpeg. image/png">
                                 </div>
-    
-                               
-    
                             </div>    
+                            <div class="margin-left-validation" id='messagenum'></div>
+                            @error('whatsapp')
+                            <span class="margin-left-validation" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
                             
                             <div class="column" style="display: flex;">
                                 <div class="input">
                                     <label for="lineID" style="display: block;">LINE ID</label>
-                                <input type="text" placeholder="Your LINE ID">
+                                <input type="text" name="line"value= "{{old('line')}}"placeholder="Your LINE ID" required>
+                            </div>
+                            @if($group->binusian==1)
+                            <div class="input">
+                                    <label for="flazz" style="display: block;">Upload Flazz Card <span> ( pdf, jpg, jpeg and png )</span></label>
+                                    <input type="file" name="flazz" value= "{{$member->flazz ?? old('flazz') }}"placeholder="Upload in pdf, jpg, jpeg and png" required accept="application/pdf, image/jpg, image/jpeg. image/png">
                                 </div>
-    
-                                <div class="input">
-                                    <label for="flazz" style="display: block;">Upload Flazz Card (*Binusian only)</label>
-                                <input type="file" placeholder="Upload in pdf, jpg, jpeg and png" required accept="application/pdf, image/jpg, image/jpeg. image/png">
-                                </div>
-    
-                               
-    
                             </div>       
-    
+                            @endif
+                            <div class="margin-left-validation"></div>
+                            @error('line')
+                            <span class="margin-left-validation" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror   
                             <div class="column" style="display: flex;">
                                 <div class="input">
                                     <label for="github" style="display: block;">Github/Gitlab ID</label>
-                                <input type="text" placeholder="Your Github/Gitlab ID">
+                                <input type="text"name="github" value= "{{old('github')}}"placeholder="Your Github/Gitlab ID" required>
                                 </div>
-    
+                                @if($group->binusian==0)
                                 <div class="input">
-                                    <label for="IDcard" style="display: block;">Upload ID card (*Non-Binusian only)</label>
-                                <input type="file" placeholder="Upload in pdf, jpg, jpeg and png" required accept="application/pdf, image/jpg, image/jpeg. image/png">
+                                    <label for="IDcard" style="display: block;">Upload ID card <span> ( pdf, jpg, jpeg and png )</span></label>
+                                <input type="file" name="ktp"value= "{{old('ktp')}}" placeholder="Upload in pdf, jpg, jpeg and png" required accept="application/pdf, image/jpg, image/jpeg. image/png">
                                 </div>
-    
-                               
-    
-                            </div>       
-                                
-                                
-    
-    
-                
-                            
-    
-                            
+                                @endif
+                            </div>                
                     </div>
-    
-                    <div class="addMember">
-                        <p style="text-align: center; margin-bottom: 2.5rem;">ADD MEMBER 2</p>
-                        <div class="column" style="display: flex;">
-                            <div class="input">
-                                <label for="name" style="display: block;">Full name</label>
-                            <input type="text" placeholder="Your full name">
-                            </div>
-    
-                            <div class="input">
-                                <label for="birthplace" style="display: block;">Birth place</label>
-                            <input type="text" placeholder="Your birth place" id="birthplace">
-                            </div>
-    
-                        </div>   
-                            
-                            
-    
-    
-            
-                        
-    
-                        
-    
-                        <div class="column" style="display: flex;">
-                            <div class="input">
-                                <label for="email" style="display: block;">E-mail</label>
-                            <input type="email" placeholder="Your e-mail address">
-                            </div>
-    
-                            <div class="input">
-                                <label for="birthplace" style="display: block;">Birth date</label>
-                            <input type="text" placeholder="Your birth date">
-                            </div>
-    
-                        </div>       
-    
-                        
-                        <div class="column" style="display: flex;">
-                            <div class="input">
-                                <label for="tel" style="display: block;">Whatsapp Number</label>
-                            <input type="tel" placeholder="Your whatsapp number">
-                            </div>
-    
-                            <div class="input">
-                                <label for="CV" style="display: block;">Upload CV</label>
-                            <input type="file" placeholder="Upload in pdf, jpg, jpeg and png" required accept="application/pdf, image/jpg, image/jpeg. image/png">
-                            </div>
-    
-                           
-    
-                        </div>    
-                        
-                        <div class="column" style="display: flex;">
-                            <div class="input">
-                                <label for="lineID" style="display: block;">LINE ID</label>
-                            <input type="text" placeholder="Your LINE ID">
-                            </div>
-    
-                            <div class="input">
-                                <label for="flazz" style="display: block;">Upload Flazz Card (*Binusian only)</label>
-                            <input type="file" placeholder="Upload in pdf, jpg, jpeg and png" required accept="application/pdf, image/jpg, image/jpeg. image/png">
-                            </div>
-    
-                           
-    
-                        </div>       
-    
-                        <div class="column" style="display: flex;">
-                            <div class="input">
-                                <label for="github" style="display: block;">Github/Gitlab ID</label>
-                            <input type="text" placeholder="Your Github/Gitlab ID">
-                            </div>
-    
-                            <div class="input">
-                                <label for="IDcard" style="display: block;">Upload ID card (*Non-Binusian only)</label>
-                            <input type="file" placeholder="Upload in pdf, jpg, jpeg and png" required accept="application/pdf, image/jpg, image/jpeg. image/png">
-                            </div>
-    
-                           
-    
-                        </div>       
-                        
-                    </div>
-    
-    
-                    <div class="addMember">
-                        <p style="text-align: center; margin-bottom: 2.5rem;">ADD MEMBER 3</p>
-                        <div class="column" style="display: flex;">
-                            <div class="input">
-                                <label for="name" style="display: block;">Full name</label>
-                            <input type="text" placeholder="Your full name">
-                            </div>
-    
-                            <div class="input">
-                                <label for="birthplace" style="display: block;">Birth place</label>
-                            <input type="text" placeholder="Your birth place" id="birthplace">
-                            </div>
-    
-                        </div>   
-                            
-                            
-    
-    
-            
-                        
-    
-                        
-    
-                        <div class="column" style="display: flex;">
-                            <div class="input">
-                                <label for="email" style="display: block;">E-mail</label>
-                            <input type="email" placeholder="Your e-mail address">
-                            </div>
-    
-                            <div class="input">
-                                <label for="birthplace" style="display: block;">Birth date</label>
-                            <input type="text" placeholder="Your birth date">
-                            </div>
-    
-                        </div>       
-    
-                        
-                        <div class="column" style="display: flex;">
-                            <div class="input">
-                                <label for="tel" style="display: block;">Whatsapp Number</label>
-                            <input type="tel" placeholder="Your whatsapp number">
-                            </div>
-    
-                            <div class="input">
-                                <label for="CV" style="display: block;">Upload CV</label>
-                            <input type="file" placeholder="Upload in pdf, jpg, jpeg and png" required accept="application/pdf, image/jpg, image/jpeg. image/png">
-                            </div>
-    
-                           
-    
-                        </div>    
-                        
-                        <div class="column" style="display: flex;">
-                            <div class="input">
-                                <label for="lineID" style="display: block;">LINE ID</label>
-                            <input type="text" placeholder="Your LINE ID">
-                            </div>
-    
-                            <div class="input">
-                                <label for="flazz" style="display: block;">Upload Flazz Card (*Binusian only)</label>
-                            <input type="file" placeholder="Upload in pdf, jpg, jpeg and png" required accept="application/pdf, image/jpg, image/jpeg. image/png">
-                            </div>
-    
-                           
-    
-                        </div>       
-    
-                        <div class="column" style="display: flex;">
-                            <div class="input">
-                                <label for="github" style="display: block;">Github/Gitlab ID</label>
-                            <input type="text" placeholder="Your Github/Gitlab ID">
-                            </div>
-    
-                            <div class="input">
-                                <label for="IDcard" style="display: block;">Upload ID card (*Non-Binusian only)</label>
-                            <input type="file" placeholder="Upload in pdf, jpg, jpeg and png" required accept="application/pdf, image/jpg, image/jpeg. image/png">
-                            </div>
-    
-                           
-    
-                        </div>       
-                        
-                    </div>
-    
-                   
                     <div id="submit" style="padding-top: 3.5rem;">
                         <button type="submit" id="submit">Confirm and Submit</button>
                     </form>
                 </div>
+            </div>
+           
+
+            @elseif($group->memberCount>=3)
+        <div class="toggle1">
+                    <button">
+                        
+                        <p>Members Data<i class="fa fa-caret-down"   aria-hidden="true" style="font-size: 20px;"></i></p>
+                        
+                    </button>
+                    
+                </div>
+    
+                @foreach ($group->member as $grup)
+                <br>
+                <div class="parag1">
+                    
+                    <p style="text-align: center;">Member {{$count++}}</p>
+                   
+                        
+                    
+
+                    <form>
+                        <div class="column" style="display: flex;">
+                            <div class="input">
+                                <label for="names" style="display: block;">Full Name</label>
+                            <input type="text" placeholder="{{$grup->name}}" id="fullName" readonly disabled="disabled">
+                            </div>
+
+                            <div class="input">
+                                <label for="lineid" style="display: block;">LINE ID</label>
+                            <input type="text" placeholder="{{$grup->line}}" id="lineid" readonly disabled="disabled">
+                            </div>
+                            
+
+                            
+                        </div>
+
+                        <div class="column" style="display: flex;">
+                            <div class="input">
+                                <label for="name" style="display: block;">E-mail</label>
+                            <input type="email" placeholder="{{$grup->email}}" id="E-mail"readonly disabled="disabled">
+                            </div>
+
+                            <div class="input">
+                                <label for="birthplace" style="display: block;">Birth place</label>
+                            <input type="text" placeholder="{{$grup->birth_place}}" id="birthplace" readonly disabled="disabled">
+                            </div>
+                            
+
+                            
+                        </div>
+
+                        <div class="column" style="display: flex;">
+                            <div class="input">
+                                <label for="WA" style="display: block;">Whatsapp Number</label>
+                            <input type="tel" placeholder="{{$grup->whatsapp}}" id="wa"readonly disabled="disabled">
+                            </div>
+
+                            <div class="input">
+                                <label for="birthdate" style="display: block;">Birth date</label>
+                            <input type="text" placeholder="{{$grup->birth_date}}" id="birthdate"readonly disabled="disabled">
+                            </div>
+                            
+
+                            
+                        </div>
+                        
+                        <div class="column" style="display: flex; justify-content: center; margin-bottom: 2rem;" >
+                            <div class="input">
+                                <label for="WA" style="display: block;">Github/Gitlab ID</label>
+                            <input type="text" placeholder="{{$grup->github}}" id="wa"readonly disabled="disabled">
+                            </div>
+                            
+
+                            
+                        </div>
+
+
+                    </form>
+
+                    <p style="text-align: center;">Click to Preview</p>
+
+                    @if($group->binusian==1)
+                            <div class="viewBukti">
+
+                        
+                    <!-- Yang href nya nnti di ganti aja -->
+                       
+                        <a href="{{asset('/storage/Product/'.$group->cv)}}" target="_blank"><p>Curriculum Vitae</p></a> 
+                        <a href="{{asset('/storage/Product/'.$grup->flazz)}}" target="_blank"><p>Flazz Card </p></a> 
+                    </div>
+                </div>
+                @elseif ($group->binusian==0)
+                <div class="viewBukti">
+                       <a href="{{asset('/storage/Product/'.$grup->ktp)}}" target="_blank">
+                            <p>ID Card </p>
+                            
+                        </a> 
+                        <a href="{{asset('/storage/Product/'.$grup->cv)}}" target="_blank"><p>Curriculum Vitae</p></a> 
+                        {{-- <a href="{{asset('/storage/Product/'.$group->leader->flazz)}}" target="_blank"><p>Flazz Card (*Binusian only)</p></a>  --}}
+                    </div>
+                </div>
+                @endif
+                @endforeach
+                @endif
+               
+                
+                
                 
 
-                    
-                
-            </div>
 
             <section id="cp">
                 <div class="container">
@@ -492,5 +424,62 @@
     
     
 </body>
+<script>
+function showFileInput() {
+    document.getElementById("file-input").style.display = "block";
+    document.getElementById("flazz_upload").required = true;
+    document.getElementById("file-inputs").style.display = "none";
+    document.getElementById("ktp_upload").required = false
+  }
+  
+  function hideFileInput() {
+    document.getElementById("file-input").style.display = "none";
+    document.getElementById("flazz_upload").required = false;
+    document.getElementById("file-inputs").style.display = "block";
+    document.getElementById("ktp_upload").required = true;
+  }
+  
+  
+      function validate_password() {
+  
+          var pass = document.getElementById('pass').value;
+          var confirm_pass = document.getElementById('confirm_pass').value;
+          if (pass != confirm_pass) {
+              document.getElementById('wrong_pass_alert').style.color = 'red';
+              document.getElementById('wrong_pass_alert').innerHTML
+                = 'Cannot submit, Use same password';
+              document.getElementById('create').disabled = true;
+              document.getElementById('create').style.opacity = (0.4);
+          }else {
+              document.getElementById('wrong_pass_alert').innerHTML
+                = '';
+              document.getElementById('create').disabled = false;
+              document.getElementById('create').style.opacity = (1);
+          }
+      }
+  
+      function validate_waNum() {
+  
+  var num = document.getElementById('num').value;
+  var numLength = num.toString().length;
+  if (numLength<9||numLength>=13) {
+      document.getElementById('messagenum').style.color = 'red';
+      document.getElementById('messagenum').innerHTML
+        = 'Whatsapp number not valid';
+        document.getElementById('messagenumunique').style.color = 'red';
+        document.getElementById('messagenumunique').innerHTML
+      //   = 'Whatsapp number not unique';
+      document.getElementById('create').disabled = true;
+      document.getElementById('create').style.opacity = (0.4);
+  }else {
+      document.getElementById('messagenum').innerHTML
+        = '';
+      document.getElementById('create').disabled = false;
+      document.getElementById('create').style.opacity = (1);
+  }
+  }
+  
+  
+  </script>
 
 </html>

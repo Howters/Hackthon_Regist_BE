@@ -35,7 +35,9 @@ body {
     align-items: center;
     padding-right: 40px;
 }
-
+/* .alert-danger {
+  background-color: #cf1919 !important;
+} */
 .nav-menu {
     text-align: center;
     padding-right: 100px;

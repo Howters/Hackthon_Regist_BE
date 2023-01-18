@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Group;
 use App\Models\Leader;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 
 class GroupController extends Controller
@@ -36,57 +38,105 @@ class GroupController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
-        $validated = $request->validate([
-                'line' => 'required|unique:leaders',
-                'email' => 'required|unique:leaders',
-                
-
-                
-            ],[
-                'line.required' => 'line is required',
-                'email.required' => 'email is required',
-       
-            ]);
-       
-
-        
-        
-
-        Group::create([
-        
-            'name'=>$request->groupName,
-            'password' =>  bcrypt($request->pass)
-          
-        ]);
-
-   
-            $extension_cv = $request -> file('leaderCv')->getClientOriginalExtension();
-            $extension_flazz= $request -> file('leaderFlazz')->getClientOriginalExtension();
-            $extension_ktp = $request -> file('leaderKtp')->getClientOriginalExtension();
-            $filename_cv = $request -> leaderName.'_'."cv".'.'.$extension_cv;
-            $filename_flazz = $request -> leaderName.'_'."flazz".'.'.$extension_flazz;
-            $filename_ktp = $request -> leaderName.'_'."ktp".'.'.$extension_ktp;
     
-            $request->file('leaderCv')->storeAs('/public/Product/', $filename_cv);
-            $request->file('leaderFlazz')->storeAs('/public/Product/', $filename_flazz);
-            $request->file('leaderKtp')->storeAs('/public/Product/', $filename_ktp);
+    {
+      
+        $validated = $request->validate([
+                'line' => 'unique:leaders',
+                'email' => 'unique:leaders',
+                'whatsapp'=> 'unique:leaders',
+                // 'binus' => 'required|in:Binusian,Non-Binusian',
+                // 'flazz' => 'required_if:binus,Binusian|file|mimes:pdf,jpg,jpeg,png|max:5000',
+                // 'ktp' => 'required_if:binus,Non-Binusian|file|mimes:pdf,jpg,jpeg,png|max:5000',
+                
+        ],[
+                'line.unique' => 'Line ID has already been taken.',
+                'email.unique' => 'Email has already been taken.',
+                'whatsapp.unique'=> 'Whatsapp number has already been taken.',
+        ]);
+       
 
+        
+        
+
+      
+
+        if($request->binus=="yes"){
+            $group = Group::create([
+        
+                'name'=>$request->groupName,
+                'password' =>  bcrypt($request->pass),
+                'binusian'=> 1
+               
+              
+            ]);
+            $group->leader_id = $group->id;
+            $group->save();
+
+            $extension_cv = $request -> file('cv')->getClientOriginalExtension();
+            $extension_flazz= $request -> file('flazz')->getClientOriginalExtension();
+            $filename_cv = $request -> name.'_'."cv".'.'.$extension_cv;
+            $filename_flazz = $request -> name.'_'."flazz".'.'.$extension_flazz;
+            $request->file('cv')->storeAs('/public/Product/', $filename_cv);
+            $request->file('flazz')->storeAs('/public/Product/', $filename_flazz);
             Leader::create([
     
-                'name'=>$request->leaderName,
+                'name'=>$request->name,
                 'email'=>$request->email,
-                'whatsapp'=>$request->leaderWa,
+                'whatsapp'=>$request->whatsapp,
                 'line'=>$request->line,
-                'github'=>$request->leaderGit,
-                'birth_place'=>$request->leaderPlace,
-                'birth_date'=> $request->leaderDate,
+                'github'=>$request->git,
+                'birth_place'=>$request->birth_place,
+                'birth_date'=> $request->birth_date,
                 'cv'=>$filename_cv,
                 'flazz'=>$filename_flazz,
+
+               
+                
+            ]);
+            Auth::login($group);
+            return redirect()->intended('dashboard');
+
+        }
+        else{
+            $group = Group::create([
+        
+                'name'=>$request->groupName,
+                'password' =>  bcrypt($request->pass),
+                
+               
+              
+            ]);
+            $group->leader_id = $group->id;
+            $group->save();
+            $extension_cv = $request -> file('cv')->getClientOriginalExtension();
+        
+            $extension_ktp = $request -> file('ktp')->getClientOriginalExtension();
+            $filename_cv = $request -> name.'_'."cv".'.'.$extension_cv;
+     
+            $filename_ktp = $request -> name.'_'."ktp".'.'.$extension_ktp;
+    
+            $request->file('cv')->storeAs('/public/Product/', $filename_cv);
+   
+            $request->file('ktp')->storeAs('/public/Product/', $filename_ktp);
+            Leader::create([
+    
+                'name'=>$request->name,
+                'email'=>$request->email,
+                'whatsapp'=>$request->whatsapp,
+                'line'=>$request->line,
+                'github'=>$request->git,
+                'birth_place'=>$request->birth_place,
+                'birth_date'=> $request->birth_date,
+                'cv'=>$filename_cv,
                 'ktp'=>$filename_ktp,
                 
             ]);
-            return redirect('/');
+            Auth::login($group);
+            return redirect()->intended('dashboard');
+            
+        }
+
       
         
 

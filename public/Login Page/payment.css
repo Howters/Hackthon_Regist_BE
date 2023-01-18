@@ -95,7 +95,20 @@ a#db {
 a {
     text-decoration: none;
 }
+.viewBukti {
+    display: flex;
+    justify-content: space-around;
+    margin-right: 1.2rem;
+  
+}
 
+.viewBukti p {
+    font-size: 20px;
+    font-weight: normal;
+    padding: 0.9rem 4.0rem;
+    border-radius: 28px;
+    background-color: #6C555C;
+}
 
 img {
     width: 425px;
